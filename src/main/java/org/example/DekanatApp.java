@@ -5,11 +5,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.example.windows.LoginWindow;
 
 public class DekanatApp extends Application
 {
   @Override
-  public void start(Stage primaryStage) {
+  public void start(Stage primaryStage) throws InterruptedException
+  {
     Label label = new Label("Привет, JavaFX!");
     StackPane root = new StackPane(label);
     Scene scene = new Scene(root, 400, 300);
@@ -17,6 +19,7 @@ public class DekanatApp extends Application
     primaryStage.setTitle("Деканат");
     primaryStage.setScene(scene);
     primaryStage.show();
+    new LoginWindow(primaryStage).display();
   }
 
   public static void main(String[] args) {

@@ -3,7 +3,6 @@ package org.example;
 import java.io.IOException;
 import java.sql.*;
 
-import org.mindrot.*;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthService
