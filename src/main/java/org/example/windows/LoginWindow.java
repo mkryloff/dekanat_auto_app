@@ -57,7 +57,7 @@ public class LoginWindow
     AuthService.AuthResult result = auth.loginUser(loginField.getText(), passwordField.getText());
     if (result.isSuccess())
     {
-      new MainWindow(mainStage).display();
+      new MainWindow(mainStage, result.role()).display();
     }
     else
     {
