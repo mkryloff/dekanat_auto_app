@@ -1,20 +1,10 @@
 package org.example.dataServices;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import org.example.DatabaseConnection;
 import org.example.entities.PersonEntity;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,41 +50,57 @@ public class PersonService
     }
   }
 
-  public static Node createView()
+  public static void deletePerson(Integer id) throws SQLException, IOException
   {
-    TableView<PersonEntity> view = new TableView<>();
-    TableColumn<PersonEntity, Integer> idCol = new TableColumn<>("ID");
-    idCol.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().id()).asObject());
-
-    TableColumn<PersonEntity, String> firstNameCol = new TableColumn<>("firstName");
-    firstNameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().firstName()));
-
-    TableColumn<PersonEntity, String> lastNameCol = new TableColumn<>("lastName");
-    lastNameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().lastName()));
-
-    TableColumn<PersonEntity, String> fatherNameCol = new TableColumn<>("fatherName");
-    fatherNameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().fatherName()));
-
-    TableColumn<PersonEntity, Integer> groupIdCol = new TableColumn<>("groupID");
-    groupIdCol.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().id()).asObject());
-
-    TableColumn<PersonEntity, String> groupNameCol = new TableColumn<>("groupName");
-    groupNameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().groupName()));
-
-    TableColumn<PersonEntity, String> typeCol = new TableColumn<>("type");
-    typeCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().type()));
-
-    view.getColumns().addAll(idCol, firstNameCol, lastNameCol, fatherNameCol, groupIdCol, groupNameCol, typeCol);
-    ObservableList<PersonEntity> data = FXCollections.observableArrayList();
-    try
+    try (Connection conn = DatabaseConnection.createConnection("config.ini"))
     {
-      data.addAll(PersonService.loadData(0));
-      view.setItems(data);
+      PreparedStatement s = conn.prepareStatement("DELETE FROM people WHERE id = ?");
+      s.setInt(1, id);
+      s.execute();
     }
-    catch (SQLException | IOException e)
+  }
+
+  public static void updatePerson(Integer id, String firstName, String lastName, String fatherName, Integer groupID, String type) throws SQLException, IOException
+  {
+    try (Connection conn = DatabaseConnection.createConnection("config.ini"))
     {
-      throw new RuntimeException(e);
+      String query = """
+          UPDATE PEOPLE
+          SET
+            first_name = ?,
+            last_name = ?,
+            father_name = ?,
+            group_id = ?,
+            type = ?
+          WHERE id = ?
+          """;
+
+      PreparedStatement s = conn.prepareStatement(query);
+      s.setString(1, firstName);
+      s.setString(2, lastName);
+      s.setString(3, fatherName);
+      s.setObject(4, groupID, Types.INTEGER);
+      s.setString(5, type);
+      s.setInt(6, id);
+      s.execute();
     }
-    return view;
+  }
+
+  public static void createPerson(String firstName, String lastName, String fatherName, Integer groupID, String type) throws SQLException, IOException
+  {
+    try (Connection conn = DatabaseConnection.createConnection("config.ini"))
+    {
+      String sql = """
+          INSERT INTO people (first_name, last_name, father_name, group_id, type)
+          VALUES (?, ?, ?, ?, ?)
+          """;
+      PreparedStatement s = conn.prepareStatement(sql);
+      s.setString(1, firstName);
+      s.setString(2, lastName);
+      s.setString(3, fatherName);
+      s.setObject(4, groupID, Types.INTEGER);
+      s.setString(5, type);
+      s.execute();
+    }
   }
 }
