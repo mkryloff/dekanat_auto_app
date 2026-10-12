@@ -1,12 +1,5 @@
 package org.example.dataServices;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import org.example.DatabaseConnection;
 import org.example.entities.SubjectEntity;
 
@@ -36,26 +29,34 @@ public class SubjectService
     }
   }
 
-  public static Node createView()
+  public static void deleteSubject(Integer id) throws SQLException, IOException
   {
-    TableView<SubjectEntity> view = new TableView<>();
-    TableColumn<SubjectEntity, Integer> idCol = new TableColumn<>("ID");
-    idCol.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().id()).asObject());
+    try (Connection conn = DatabaseConnection.createConnection("config.ini"))
+    {
+      PreparedStatement s = conn.prepareStatement("DELETE FROM subjects WHERE id = ?");
+      s.setInt(1, id);
+      s.execute();
+    }
+  }
 
-    TableColumn<SubjectEntity, String> nameCol = new TableColumn<>("Name");
-    nameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().name()));
-    view.getColumns().add(idCol);
-    view.getColumns().add(nameCol);
-    ObservableList<SubjectEntity> data = FXCollections.observableArrayList();
-    try
+  public static void updateSubject(Integer id, String newName) throws SQLException, IOException
+  {
+    try (Connection conn = DatabaseConnection.createConnection("config.ini"))
     {
-      data.addAll(SubjectService.loadData(0));
-      view.setItems(data);
+      PreparedStatement s = conn.prepareStatement("UPDATE subjects SET name = ? WHERE id = ?");
+      s.setString(1, newName);
+      s.setInt(2, id);
+      s.execute();
     }
-    catch (SQLException | IOException e)
+  }
+
+  public static void createSubject(String newSubject) throws SQLException, IOException
+  {
+    try (Connection conn = DatabaseConnection.createConnection("config.ini"))
     {
-      throw new RuntimeException(e);
+      PreparedStatement s = conn.prepareStatement("INSERT INTO subjects (name) VALUES (?)");
+      s.setString(1, newSubject);
+      s.execute();
     }
-    return view;
   }
 }

@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.example.dataServices.GroupService;
-import org.example.dialogueForms.GroupDialogueForm;
+import org.example.dialogForms.GroupDialogForm;
 import org.example.entities.GroupEntity;
 
 import java.io.IOException;
@@ -99,7 +99,7 @@ public class GroupView
 
   private void handleCreate()
   {
-    GroupDialogueForm form = new GroupDialogueForm(null);
+    GroupDialogForm form = new GroupDialogForm(null);
     Optional<GroupEntity> result = form.showAndWait();
     result.ifPresent(groupEntity ->
     {
@@ -123,7 +123,7 @@ public class GroupView
       new Alert(Alert.AlertType.WARNING, "НЕОБХОДИМО ВЫБРАТЬ ГРУППУ").showAndWait();
       return;
     }
-    GroupDialogueForm form = new GroupDialogueForm(selected);
+    GroupDialogForm form = new GroupDialogForm(selected);
     Optional<GroupEntity> result = form.showAndWait();
     result.ifPresent(groupEntity ->
     {
