@@ -1,8 +1,7 @@
 package org.example.windows;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -28,16 +27,16 @@ public class MainWindow
     this.root = new BorderPane();
     HBox menuBar = new HBox();
 
-    Button switchToReferenceBooks = new Button("СПРАВОЧНИКИ");
+    ToggleButton switchToReferenceBooks = new ToggleButton("СПРАВОЧНИКИ");
     switchToReferenceBooks.setOnAction(e -> handleSwitchPage("refbooks"));
 
-    Button switchToJournals = new Button("ЖУРНАЛЫ");
+    ToggleButton switchToJournals = new ToggleButton("ЖУРНАЛЫ");
     switchToJournals.setOnAction(e -> handleSwitchPage("journals"));
 
-    Button switchToReports = new Button("ОТЧЕТЫ");
+    ToggleButton switchToReports = new ToggleButton("ОТЧЕТЫ");
     switchToReports.setOnAction(e -> handleSwitchPage("reports"));
 
-    menuBar.getChildren().addAll(switchToJournals, switchToReferenceBooks, switchToReports);
+    menuBar.getChildren().addAll(switchToReferenceBooks, switchToJournals, switchToReports);
 
     HBox statusBar = new HBox();
     Label userNameLabel = new Label("Пользователь: " + this.userRole);
@@ -57,13 +56,13 @@ public class MainWindow
     switch (pageToSwitch)
     {
       case "refbooks":
-        root.setCenter(new RefbooksPage().build());
+        root.setCenter(new RefbooksPage().build(this.userRole));
         break;
       case "journals":
-        root.setCenter(new JournalsPage().build());
+        root.setCenter(new JournalsPage().build(this.userRole));
         break;
       case "reports":
-        root.setCenter(new ReportsPage().build());
+        root.setCenter(new ReportsPage().build(this.userRole));
         break;
     }
   }

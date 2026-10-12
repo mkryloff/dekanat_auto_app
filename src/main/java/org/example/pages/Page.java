@@ -4,5 +4,5 @@ import javafx.scene.Node;
 
 public interface Page
 {
-  Node build();
+  Node build(String role);
 }

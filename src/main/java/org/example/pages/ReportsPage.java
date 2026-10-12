@@ -6,7 +6,7 @@ import javafx.scene.layout.HBox;
 public class ReportsPage implements Page
 {
   @Override
-  public Node build()
+  public Node build(String role)
   {
     return new HBox();
   }
