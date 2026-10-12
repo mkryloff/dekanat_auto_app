@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.example.Notifications;
 import org.example.dataServices.SubjectService;
 import org.example.dialogForms.SubjectDialogForm;
 import org.example.entities.SubjectEntity;
@@ -78,11 +79,10 @@ public class SubjectView
     SubjectEntity selected = this.view.getSelectionModel().getSelectedItem();
     if (selected == null)
     {
-      new Alert(Alert.AlertType.WARNING, "НЕОБХОДИМО ВЫБРАТЬ ПРЕДМЕТ").showAndWait();
+      Notifications.notify(Alert.AlertType.WARNING, "НЕОБХОДИМО ВЫБРАТЬ ПРЕДМЕТ");
       return;
     }
-    Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
-    Optional<ButtonType> result = confirmDelete.showAndWait();
+    Optional<ButtonType> result = Notifications.notifyWithReturn(Alert.AlertType.CONFIRMATION, "Вы уверены, что хотите удалить?");
     if (result.isPresent() && result.get() == ButtonType.OK)
     {
       try
@@ -92,7 +92,7 @@ public class SubjectView
       }
       catch (SQLException | IOException e)
       {
-        new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
       }
     }
   }
@@ -110,7 +110,7 @@ public class SubjectView
       }
       catch (SQLException | IOException e)
       {
-        new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
       }
     });
   }
@@ -120,7 +120,7 @@ public class SubjectView
     SubjectEntity selected = view.getSelectionModel().getSelectedItem();
     if (selected == null)
     {
-      new Alert(Alert.AlertType.WARNING, "НЕОБХОДИМО ВЫБРАТЬ ПРЕДМЕТ").showAndWait();
+      Notifications.notify(Alert.AlertType.WARNING, "НЕОБХОДИМО ВЫБРАТЬ ПРЕДМЕТ");
       return;
     }
     SubjectDialogForm form = new SubjectDialogForm(selected);
@@ -134,7 +134,7 @@ public class SubjectView
       }
       catch (SQLException | IOException e)
       {
-        new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
       }
     });
   }

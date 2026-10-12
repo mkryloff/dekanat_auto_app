@@ -29,7 +29,7 @@ public class PersonDialogForm extends Dialog<PersonEntity>
     }
     catch (SQLException | IOException e)
     {
-      Notifications.notifyError("CANNOT OPEN FORM " + e.getMessage());
+      Notifications.notify(Alert.AlertType.ERROR, "CANNOT OPEN FORM " + e.getMessage());
     }
 
     ButtonType submitButton = new ButtonType("СОХРАНИТЬ", ButtonBar.ButtonData.OK_DONE);

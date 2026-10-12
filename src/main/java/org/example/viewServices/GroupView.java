@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.example.Notifications;
 import org.example.dataServices.GroupService;
 import org.example.dialogForms.GroupDialogForm;
 import org.example.entities.GroupEntity;
@@ -65,7 +66,7 @@ public class GroupView
     }
     catch (SQLException | IOException e)
     {
-      throw new RuntimeException(e);
+      Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
     }
 
     VBox root = new VBox(10, toolBar, this.view);
@@ -78,11 +79,10 @@ public class GroupView
     GroupEntity selected = this.view.getSelectionModel().getSelectedItem();
     if (selected == null)
     {
-      new Alert(Alert.AlertType.WARNING, "НЕОБХОДИМО ВЫБРАТЬ ГРУППУ").showAndWait();
+      Notifications.notify(Alert.AlertType.WARNING, "НЕОБХОДИМО ВЫБРАТЬ ГРУППУ");
       return;
     }
-    Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
-    Optional<ButtonType> result = confirmDelete.showAndWait();
+    Optional<ButtonType> result = Notifications.notifyWithReturn(Alert.AlertType.CONFIRMATION, "Вы уверены, что хотите удалить?");
     if (result.isPresent() && result.get() == ButtonType.OK)
     {
       try
@@ -92,7 +92,7 @@ public class GroupView
       }
       catch (SQLException | IOException e)
       {
-        new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
       }
     }
   }
@@ -110,7 +110,7 @@ public class GroupView
       }
       catch (SQLException | IOException e)
       {
-        new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
       }
     });
   }
@@ -134,7 +134,7 @@ public class GroupView
       }
       catch (SQLException | IOException e)
       {
-        new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
       }
     });
   }

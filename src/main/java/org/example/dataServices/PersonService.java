@@ -60,7 +60,14 @@ public class PersonService
     }
   }
 
-  public static void updatePerson(Integer id, String firstName, String lastName, String fatherName, Integer groupID, String type) throws SQLException, IOException
+  public static void updatePerson(
+      Integer id,
+      String firstName,
+      String lastName,
+      String fatherName,
+      Integer groupID,
+      String type
+  ) throws SQLException, IOException
   {
     try (Connection conn = DatabaseConnection.createConnection("config.ini"))
     {
@@ -86,7 +93,13 @@ public class PersonService
     }
   }
 
-  public static void createPerson(String firstName, String lastName, String fatherName, Integer groupID, String type) throws SQLException, IOException
+  public static void createPerson(
+      String firstName,
+      String lastName,
+      String fatherName,
+      Integer groupID,
+      String type
+  ) throws SQLException, IOException
   {
     try (Connection conn = DatabaseConnection.createConnection("config.ini"))
     {

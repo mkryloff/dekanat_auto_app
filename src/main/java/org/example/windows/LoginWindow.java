@@ -51,7 +51,7 @@ public class LoginWindow
   {
     if (loginField.getText().trim().isEmpty() || passwordField.getText().trim().isEmpty())
     {
-        Notifications.notifyError("Заполнены не все необходимые поля");
+        Notifications.notify(Alert.AlertType.ERROR, "Заполнены не все необходимые поля");
         return;
     }
     AuthService.AuthResult result = auth.loginUser(loginField.getText(), passwordField.getText());
@@ -61,7 +61,7 @@ public class LoginWindow
     }
     else
     {
-      Notifications.notifyError(result.message());
+      Notifications.notify(Alert.AlertType.ERROR, result.message());
     }
   }
 }
