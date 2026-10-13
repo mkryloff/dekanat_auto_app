@@ -50,6 +50,48 @@ public class PersonService
     }
   }
 
+  public static List<PersonEntity> loadDataByType(String type, Integer pageNum) throws SQLException, IOException
+  {
+    try (Connection conn = DatabaseConnection.createConnection("config.ini"))
+    {
+      String query = """
+          SELECT
+            p.id,
+            p.first_name,
+            p.last_name,
+            p.father_name,
+            g.id AS group_id,
+            g.name AS group_name,
+            p.type
+          FROM people AS p
+          LEFT JOIN groups AS g
+            ON p.group_id = g.id
+          WHERE p.type = ?
+          LIMIT 25
+          OFFSET ?
+          """;
+
+      PreparedStatement s = conn.prepareStatement(query);
+      s.setString(1, type);
+      s.setInt(2, pageNum * 25);
+      ResultSet rs = s.executeQuery();
+      List<PersonEntity> queryRes = new ArrayList<>();
+      while (rs.next())
+      {
+        queryRes.add(new PersonEntity(
+            rs.getInt("id"),
+            rs.getString("first_name"),
+            rs.getString("last_name"),
+            rs.getString("father_name"),
+            rs.getInt("group_id"),
+            rs.getString("group_name"),
+            rs.getString("type")
+        ));
+      }
+      return queryRes;
+    }
+  }
+
   public static void deletePerson(Integer id) throws SQLException, IOException
   {
     try (Connection conn = DatabaseConnection.createConnection("config.ini"))
@@ -72,7 +114,7 @@ public class PersonService
     try (Connection conn = DatabaseConnection.createConnection("config.ini"))
     {
       String query = """
-          UPDATE PEOPLE
+          UPDATE people
           SET
             first_name = ?,
             last_name = ?,

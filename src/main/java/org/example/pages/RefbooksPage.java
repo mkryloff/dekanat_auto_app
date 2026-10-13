@@ -3,7 +3,6 @@ package org.example.pages;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import org.example.dataServices.PersonService;
 import org.example.viewServices.GroupView;
 import org.example.viewServices.PersonView;
 import org.example.viewServices.SubjectView;
