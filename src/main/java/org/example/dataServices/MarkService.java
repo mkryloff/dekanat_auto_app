@@ -188,7 +188,7 @@ public class MarkService
     {
       String sql = """
           INSERT INTO marks (student_id, subject_id, teacher_id, value)
-          VALUES (?, ?, ?, ?, ?)
+          VALUES (?, ?, ?, ?)
           """;
       PreparedStatement s = conn.prepareStatement(sql);
       s.setInt(1, studentID);

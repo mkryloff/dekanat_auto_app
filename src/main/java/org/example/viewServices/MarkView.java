@@ -28,9 +28,9 @@ public class MarkView
   private TableView<MarkEntity> view;
   private final ObservableList<MarkEntity> data = FXCollections.observableArrayList();
   private final String role;
-  private ComboBox<PersonEntity> studentFilter = new ComboBox<>();
-  private ComboBox<SubjectEntity> subjectFilter = new ComboBox<>();
-  private ComboBox<PersonEntity> teacherFilter = new ComboBox<>();
+  private final ComboBox<PersonEntity> studentFilter = new ComboBox<>();
+  private final ComboBox<SubjectEntity> subjectFilter = new ComboBox<>();
+  private final ComboBox<PersonEntity> teacherFilter = new ComboBox<>();
   private Integer currentPage = 0;
 
   public MarkView(String role)
