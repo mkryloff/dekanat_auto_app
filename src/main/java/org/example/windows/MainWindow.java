@@ -24,8 +24,12 @@ public class MainWindow
 
   public void display()
   {
+    mainStage.setTitle("Деканат");
     this.root = new BorderPane();
     HBox menuBar = new HBox();
+
+    HBox initialCenter = new HBox(new Label("ВЫБЕРИТЕ РАЗДЕЛ"));
+    root.setCenter(initialCenter);
 
     ToggleButton switchToReferenceBooks = new ToggleButton("СПРАВОЧНИКИ");
     switchToReferenceBooks.setOnAction(e -> handleSwitchPage("refbooks"));
@@ -39,6 +43,7 @@ public class MainWindow
     menuBar.getChildren().addAll(switchToReferenceBooks, switchToJournals, switchToReports);
 
     HBox statusBar = new HBox();
+    statusBar.setSpacing(10);
     Label userNameLabel = new Label("Пользователь: " + this.userRole);
     Label userRoleLabel = new Label("Роль: " + this.userRole);
 
@@ -57,12 +62,15 @@ public class MainWindow
     {
       case "refbooks":
         root.setCenter(new RefbooksPage().build(this.userRole));
+        mainStage.setTitle("Справочники");
         break;
       case "journals":
         root.setCenter(new JournalsPage().build(this.userRole));
+        mainStage.setTitle("Журналы");
         break;
       case "reports":
         root.setCenter(new ReportsPage().build(this.userRole));
+        mainStage.setTitle("Отчеты");
         break;
     }
   }

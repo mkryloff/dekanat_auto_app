@@ -43,8 +43,10 @@ public class LoginWindow
     GridPane.setHalignment(checkAuthButton, HPos.CENTER);
     GridPane.setHalignment(mainLabel, HPos.CENTER);
 
-    Scene loginScene = new Scene(root, 400, 600);
+    Scene loginScene = new Scene(root, 450, 600);
     mainStage.setScene(loginScene);
+    mainStage.setTitle("Авторизация в учетную запись деканата");
+    mainStage.show();
   }
 
   private void handleSubmit()
