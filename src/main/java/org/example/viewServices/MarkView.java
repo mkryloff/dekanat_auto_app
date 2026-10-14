@@ -12,8 +12,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.example.Notifications;
 import org.example.dataServices.MarkService;
+import org.example.dataServices.PersonService;
+import org.example.dataServices.SubjectService;
 import org.example.dialogForms.MarkDialogForm;
 import org.example.entities.MarkEntity;
+import org.example.entities.PersonEntity;
+import org.example.entities.SubjectEntity;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,6 +28,9 @@ public class MarkView
   private TableView<MarkEntity> view;
   private final ObservableList<MarkEntity> data = FXCollections.observableArrayList();
   private final String role;
+  private ComboBox<PersonEntity> studentFilter = new ComboBox<>();
+  private ComboBox<SubjectEntity> subjectFilter = new ComboBox<>();
+  private ComboBox<PersonEntity> teacherFilter = new ComboBox<>();
   private Integer currentPage = 0;
 
   public MarkView(String role)
@@ -34,6 +41,54 @@ public class MarkView
   public Node createView()
   {
     HBox toolBar = new HBox();
+
+    try
+    {
+      studentFilter.getItems().add(null);
+      studentFilter.getItems().addAll(PersonService.loadDataByType("S", 0));
+      subjectFilter.getItems().add(null);
+      subjectFilter.getItems().addAll((SubjectService.loadData(0)));
+      teacherFilter.getItems().add(null);
+      teacherFilter.getItems().addAll(PersonService.loadDataByType("P", 0));
+    }
+    catch (SQLException | IOException e)
+    {
+      Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
+    }
+
+    studentFilter.valueProperty().addListener((o, a, b) ->  {
+      try
+      {
+        data.setAll(MarkService.loadFilteredData(studentFilter.getValue(), subjectFilter.getValue(), teacherFilter.getValue()));
+      }
+      catch (SQLException | IOException e)
+      {
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
+      }
+    });
+
+    subjectFilter.valueProperty().addListener((o, a, b) ->  {
+      try
+      {
+        data.setAll(MarkService.loadFilteredData(studentFilter.getValue(), subjectFilter.getValue(), teacherFilter.getValue()));
+      }
+      catch (SQLException | IOException e)
+      {
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
+      }
+    });
+
+    teacherFilter.valueProperty().addListener((o, a, b) ->  {
+      try
+      {
+        data.setAll(MarkService.loadFilteredData(studentFilter.getValue(), subjectFilter.getValue(), teacherFilter.getValue()));
+      }
+      catch (SQLException | IOException e)
+      {
+        Notifications.notify(Alert.AlertType.ERROR, e.getMessage());
+      }
+    });
+
     Button deleteButton = new Button("УДАЛИТЬ");
     deleteButton.setOnAction(e -> handleDelete());
 
@@ -43,7 +98,7 @@ public class MarkView
     Button createButton = new Button("ДОБАВИТЬ");
     createButton.setOnAction(e -> handleCreate());
 
-    toolBar.getChildren().addAll(deleteButton, editButton, createButton);
+    toolBar.getChildren().addAll(studentFilter, subjectFilter, teacherFilter, deleteButton, editButton, createButton);
     toolBar.setAlignment(Pos.CENTER_RIGHT);
 
     if (this.role.equals("user"))
@@ -163,5 +218,13 @@ public class MarkView
   private void refreshView() throws SQLException, IOException
   {
     this.data.setAll(MarkService.loadData(currentPage));
+    resetFilters();
+  }
+
+  private void resetFilters()
+  {
+    studentFilter.setValue(null);
+    subjectFilter.setValue(null);
+    teacherFilter.setValue(null);
   }
 }
